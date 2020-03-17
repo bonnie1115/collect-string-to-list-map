@@ -1,6 +1,7 @@
 package com.github.hcsp.collection;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Main {
@@ -11,7 +12,9 @@ public class Main {
     // 返回如下映射\：
     //    技术部 -> [{name=李四, department=技术部, age=30 }, {name=张三, department=技术部, age=40 }]
     //    市场部 -> [{name=王五, department=市场部, age=40 }]
-    public static Map<String, List<User>> collect(List<User> users) {
+
+    //第一种原始方法
+    public static Map<String, List<User>> collect2(List<User> users) {
         Map<String, List<User>> mapUser = new HashMap<>();
         for (User user : users) {
             if (mapUser.containsKey(user.getDepartment())) {
@@ -30,6 +33,13 @@ public class Main {
     }
 
 
+    //第二种 java8提供的简便方法 collector
+    public static Map<String, List<User>> collect(List<User> users) {
+        return users.stream()
+                .sorted(Comparator.comparing(User::getAge))
+                .collect(Collectors.groupingBy(User::getDepartment));
+
+    }
 
     public static void main(String[] args) {
         System.out.println(
